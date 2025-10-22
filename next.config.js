@@ -1,11 +1,12 @@
- /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  images: { unoptimized: true },
-  trailingSlash: true,
-  // 👇 Only uncomment if your GitHub Pages URL is ajayw36.github.io/Portfolio-Website/
-  basePath: '/Portfolio-Website',
-  assetPrefix: '/Portfolio-Website/',
+  reactStrictMode: true,
+  // Use Next.js defaults for Vercel hosting. Remove GitHub Pages-specific fields
+  // such as `output: 'export'`, `basePath`, and `assetPrefix` so styles and
+  // static assets are served from the root path on Vercel.
+  images: {
+    // Keep Next.js image optimization enabled (default). Set to `true` implicitly.
+  },
 }
 
 module.exports = nextConfig
