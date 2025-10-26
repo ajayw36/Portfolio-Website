@@ -6,8 +6,8 @@ export default function Portfolio() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* KTP Life App */}
-          <div className="glass-card group hover-card">
-            <div className="p-6">
+          <div className="glass-card group hover-card flex flex-col">
+            <div className="p-6 flex-grow">
               <div className="mb-4">
                 <div className="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@ export default function Portfolio() {
                 <span className="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-sm">Figma</span>
               </div>
             </div>
-            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 mt-auto">
               <span className="text-gray-400 flex items-center">
                 In Development
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,8 +37,8 @@ export default function Portfolio() {
           </div>
 
           {/* Healthcare Analytics Dashboard */}
-          <div className="glass-card group hover-card">
-            <div className="p-6">
+          <div className="glass-card group hover-card flex flex-col">
+            <div className="p-6 flex-grow">
               <div className="mb-4">
                 <div className="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@ export default function Portfolio() {
                 <span className="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-sm">TypeScript</span>
               </div>
             </div>
-            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 mt-auto">
               <span className="text-gray-400 flex items-center">
                 In Development
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
