@@ -1,4 +1,54 @@
+import { useState } from 'react';
+
 export default function Contact() {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus('sending');
+
+    const form = new FormData(e.currentTarget);
+    const name = String(form.get('name') ?? '').trim();
+    const email = String(form.get('email') ?? '').trim();
+    const message = String(form.get('message') ?? '').trim();
+
+    if (!email || !message) {
+      setStatus('error');
+      return;
+    }
+
+    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+
+    try {
+      if (endpoint) {
+        // Post to Formspree endpoint (public env var should be like: https://formspree.io/f/xxxxx)
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message }),
+        });
+
+        if (res.ok) {
+          setStatus('sent');
+          e.currentTarget.reset();
+          return;
+        }
+        setStatus('error');
+        return;
+      }
+
+      // Fallback: open mail client with prefilled subject/body
+      const subject = encodeURIComponent(`Website contact from ${name || email}`);
+      const body = encodeURIComponent(message + (name ? `\n\n— ${name}` : ''));
+      window.location.href = `mailto:ajaywa@umich.edu?subject=${subject}&body=${body}`;
+      setStatus('sent');
+    } catch (err) {
+      // network or other error
+      console.error(err);
+      setStatus('error');
+    }
+  }
+
   return (
     <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -13,7 +63,7 @@ export default function Contact() {
               </svg>
               Send a Message
             </h3>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                   Name
@@ -52,10 +102,21 @@ export default function Contact() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25"
+                disabled={status === 'sending'}
+                className={`w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 ${
+                  status === 'sending' ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
               >
-                Send Message
+                {status === 'sending' ? 'Sending...' : 'Send Message'}
               </button>
+
+              {/* status messages */}
+              {status === 'sent' && (
+                <p className="text-sm text-green-400">Message sent. Thanks!</p>
+              )}
+              {status === 'error' && (
+                <p className="text-sm text-red-400">Failed to send — please try again later.</p>
+              )}
             </form>
           </div>
 
