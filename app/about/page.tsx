@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CardSwiper from "@/components/CardSwiper";
-import { updates, getGitHubUpdate, type Update } from "@/lib/site";
+import {
+  getGitHubUpdate,
+  getSpotifyUpdate,
+  getHevyUpdate,
+  type Update,
+} from "@/lib/site";
 
 export const revalidate = 600; // page-level ISR
 
@@ -23,8 +28,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const github = await getGitHubUpdate();
-  const cards: Update[] = [updates[0], github, updates[2]]; // Spotify, live GitHub, Hevy
+  const [spotify, github, hevy] = await Promise.all([
+    getSpotifyUpdate(),
+    getGitHubUpdate(),
+    getHevyUpdate(),
+  ]);
+  const cards: Update[] = [spotify, github, hevy]; // all three live
 
   return (
     <div className="min-h-screen">
@@ -87,8 +96,17 @@ export default async function AboutPage() {
                     u.title
                   )}
                 </h3>
-                <p className="mt-2 text-sm text-muted">{u.detail}</p>
-                <p className="mt-1 text-sm text-faint">{u.source}</p>
+                {u.detail && (
+                  <p className="mt-2 text-sm text-muted">{u.detail}</p>
+                )}
+                {u.lines && u.lines.length > 0 && (
+                  <ul className="mt-2 space-y-1 text-sm text-muted">
+                    {u.lines.map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mt-3 text-sm text-faint">{u.source}</p>
               </article>
             ))}
           </div>

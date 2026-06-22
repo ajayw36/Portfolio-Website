@@ -8,6 +8,7 @@ export const site = {
   socials: {
     github: "https://github.com/ajayw36",
     linkedin: "https://www.linkedin.com/in/ajay-wadhwani2006",
+    hevy: "https://hevy.com/user/ajaywa",
     resume: "/resume.pdf",
   },
 };
@@ -48,7 +49,7 @@ export const experience = [
   {
     title: "AI Engineering Intern",
     org: "Blitzy · Boston, MA",
-    detail: "Engineering Research Team.",
+    detail: "Benchmarked Blitzy's AI coding agent on SWE-bench Pro and developed internal evaluation frameworks.",
     period: "May 2026 – Aug. 2026",
   },
   {
@@ -107,9 +108,10 @@ export const projects = [
 export type Update = {
   eyebrow: string;
   title: string;
-  detail: string;
+  detail?: string;
   source: string;
   href?: string;
+  lines?: string[]; // optional multi-line body (e.g. Hevy exercise/set list)
 }
 
 export async function getGitHubUpdate(): Promise<Update> {
@@ -142,6 +144,146 @@ export async function getGitHubUpdate(): Promise<Update> {
     };
   }
   catch {
+    return fallback;
+  }
+}
+
+export async function getSpotifyUpdate(): Promise<Update> {
+  const fallback: Update = {
+    eyebrow: "Listening",
+    title: "Recently played",
+    detail: "Spotify track + artist",
+    source: "from Spotify",
+  };
+
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
+  if (!clientId || !clientSecret || !refreshToken) return fallback;
+
+  try {
+    // Exchange the long-lived refresh token for a short-lived access token.
+    const basic = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+    const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${basic}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+      }),
+      cache: "no-store", // never cache the token exchange
+    });
+    if (!tokenRes.ok) return fallback;
+    const { access_token } = await tokenRes.json();
+    if (!access_token) return fallback;
+
+    // Most recently played track.
+    const res = await fetch(
+      "https://api.spotify.com/v1/me/player/recently-played?limit=1",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+        next: { revalidate: 600 }, // cache 10 min
+      }
+    );
+    if (!res.ok) return fallback;
+
+    const data = await res.json();
+    const item = data.items?.[0];
+    if (!item) return fallback;
+
+    const track = item.track;
+    const artists = track.artists.map((a: { name: string }) => a.name).join(", ");
+
+    return {
+      eyebrow: "Listening",
+      title: track.name,
+      detail: artists,
+      source: `Played ${timeAgo(item.played_at)}`,
+      href: track.external_urls?.spotify,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+type HevySet = {
+  weight_kg: number | null;
+  reps: number | null;
+  duration_seconds: number | null;
+  distance_meters: number | null;
+};
+type HevyExercise = { title: string; sets: HevySet[] };
+
+const KG_TO_LB = 2.20462;
+
+// Format one exercise into a single line, e.g.
+// "Hack Squat (Machine) — 3 × 10 @ 184 lb" (collapsed when sets are identical)
+// or "Bench Press — 135×8, 135×6" when they differ.
+function formatExercise(ex: HevyExercise): string {
+  const sets = ex.sets ?? [];
+  if (sets.length === 0) return ex.title;
+
+  const fmtSet = (s: HevySet): string => {
+    const lb = s.weight_kg ? `${Math.round(s.weight_kg * KG_TO_LB)} lb` : null;
+    if (s.reps != null && lb) return `${lb} × ${s.reps}`;
+    if (s.reps != null) return `${s.reps} reps`;
+    if (s.duration_seconds != null) return `${Math.round(s.duration_seconds / 60)} min`;
+    if (s.distance_meters != null) return `${s.distance_meters} m`;
+    return lb ?? "—";
+  };
+
+  const formatted = sets.map(fmtSet);
+  if (formatted.length === 1) {
+    return `${ex.title} — ${formatted[0]}`;
+  }
+  const allSame = formatted.every((f) => f === formatted[0]);
+  if (allSame) {
+    return `${ex.title} — ${sets.length} sets · ${formatted[0]}`;
+  }
+  return `${ex.title} — ${formatted.join(", ")}`;
+}
+
+export async function getHevyUpdate(): Promise<Update> {
+  const fallback: Update = {
+    eyebrow: "Lifting",
+    title: "Latest workout",
+    detail: "Hevy session summary",
+    source: "from Hevy",
+  };
+
+  const apiKey = process.env.HEVY_API_KEY?.trim();
+  if (!apiKey) return fallback;
+
+  try {
+    const res = await fetch(
+      "https://api.hevyapp.com/v1/workouts?page=1&pageSize=1",
+      {
+        headers: { "api-key": apiKey },
+        next: { revalidate: 600 }, // cache 10 min
+      }
+    );
+    if (!res.ok) return fallback;
+
+    const data = await res.json();
+    const workout = data.workouts?.[0];
+    if (!workout) return fallback;
+
+    const exercises: HevyExercise[] = workout.exercises ?? [];
+    const lines = exercises.slice(0, 3).map(formatExercise);
+    const extra = exercises.length - 3;
+    if (extra > 0) lines.push(`+${extra} more`);
+
+    return {
+      eyebrow: "Lifting",
+      title: workout.title || "Workout",
+      source: `Trained ${timeAgo(workout.start_time)}`,
+      href: site.socials.hevy,
+      lines,
+    };
+  } catch {
     return fallback;
   }
 }
