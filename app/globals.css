@@ -18,6 +18,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Fluid root size: scales the whole rem-based type & spacing scale up,
+     more so on larger screens. ~17px on small, ~20px on large displays. */
+  font-size: clamp(17px, 15px + 0.33vw, 20px);
 }
 
 body {
