@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CardSwiper from "@/components/CardSwiper";
-import { updates } from "@/lib/site";
+import { updates, getGitHubUpdate, type Update } from "@/lib/site";
+
+export const revalidate = 600; // page-level ISR
+
 
 const PORTRAITS = [
   { src: "/photos/baby.jpg", alt: "Ajay as a kid" },
@@ -19,7 +22,10 @@ export const metadata: Metadata = {
   title: "About — Ajay Wadhwani",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const github = await getGitHubUpdate();
+  const cards: Update[] = [updates[0], github, updates[2]]; // Spotify, live GitHub, Hevy
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -61,14 +67,25 @@ export default function AboutPage() {
             Live Updates
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {updates.map((u) => (
+            {cards.map((u) => (
               <article
                 key={u.eyebrow}
                 className="rounded-2xl border border-line bg-surface p-5"
               >
                 <p className="eyebrow">{u.eyebrow}</p>
                 <h3 className="mt-3 font-display text-cream text-xl">
-                  {u.title}
+                  {u.href ? (
+                    <a
+                      href={u.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-opacity hover:opacity-70"
+                    >
+                      {u.title}
+                    </a>
+                  ) : (
+                    u.title
+                  )}
                 </h3>
                 <p className="mt-2 text-sm text-muted">{u.detail}</p>
                 <p className="mt-1 text-sm text-faint">{u.source}</p>

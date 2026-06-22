@@ -12,8 +12,7 @@ export const site = {
   },
 };
 
-// The "live updates" cards on the About page. These are placeholders today —
-// each is meant to be wired to its source API (Spotify / GitHub / Hevy) later.
+// The "live updates" cards on the About page.
 export const updates = [
   {
     eyebrow: "Listening",
@@ -28,7 +27,7 @@ export const updates = [
     source: "from GitHub",
   },
   {
-    eyebrow: "Working out",
+    eyebrow: "Lifting",
     title: "Latest workout",
     detail: "Hevy session summary",
     source: "from Hevy",
@@ -104,3 +103,55 @@ export const projects = [
     period: "Jan. 2026 – Feb. 2026",
   },
 ] as const;
+
+export type Update = {
+  eyebrow: string;
+  title: string;
+  detail: string;
+  source: string;
+  href?: string;
+}
+
+export async function getGitHubUpdate(): Promise<Update> {
+  const fallback: Update = {
+    eyebrow: "Building",
+    title: "Latest repo",
+    detail: "Updated on GitHub",
+    source: "from GitHub",
+  }
+  try {
+    const res = await fetch(
+      "https://api.github.com/users/ajayw36/repos?sort=pushed&per_page=1", 
+      {
+        headers: { Accept: "application/vnd.github+json" },
+        next: { revalidate: 600 }
+      } // cache 10 min
+    );
+
+    if (!res.ok) return fallback;
+
+    const [repo] = await res.json();
+    if (!repo) return fallback;
+
+    return {
+      eyebrow: "Building",
+      title: repo.name,
+      detail: repo.description ?? "No description yet",
+      source: `Updated ${timeAgo(repo.pushed_at)}`,
+      href: repo.html_url,
+    };
+  }
+  catch {
+    return fallback;
+  }
+}
+
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const days = Math.floor(diff / 86_400_000);
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
+  const months = Math.floor(days / 30);
+  return months === 1 ? "1 month ago" : `${months} months ago`;
+}
