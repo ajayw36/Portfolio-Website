@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CardSwiper from "@/components/CardSwiper";
+import PhotoGallery from "@/components/PhotoGallery";
 import {
   getGitHubUpdate,
   getSpotifyUpdate,
@@ -76,39 +77,45 @@ export default async function AboutPage() {
             Live Updates
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {cards.map((u) => (
-              <article
-                key={u.eyebrow}
-                className="rounded-2xl border border-line bg-surface p-5"
-              >
-                <p className="eyebrow">{u.eyebrow}</p>
-                <h3 className="mt-3 font-display text-cream text-xl">
-                  {u.href ? (
-                    <a
-                      href={u.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="transition-opacity hover:opacity-70"
-                    >
-                      {u.title}
-                    </a>
-                  ) : (
-                    u.title
+            {cards.map((u) => {
+              const cardClass =
+                "group block rounded-2xl border border-line bg-surface p-5 transition-transform duration-300 hover:scale-105";
+              const inner = (
+                <>
+                  <p className="eyebrow">{u.eyebrow}</p>
+                  <h3 className="mt-3 font-display text-cream text-xl">
+                    {u.title}
+                  </h3>
+                  {u.detail && (
+                    <p className="mt-2 text-sm text-muted">{u.detail}</p>
                   )}
-                </h3>
-                {u.detail && (
-                  <p className="mt-2 text-sm text-muted">{u.detail}</p>
-                )}
-                {u.lines && u.lines.length > 0 && (
-                  <ul className="mt-2 space-y-1 text-sm text-muted">
-                    {u.lines.map((line, i) => (
-                      <li key={i}>{line}</li>
-                    ))}
-                  </ul>
-                )}
-                <p className="mt-3 text-sm text-faint">{u.source}</p>
-              </article>
-            ))}
+                  {u.lines && u.lines.length > 0 && (
+                    <ul className="mt-2 space-y-1 text-sm text-muted">
+                      {u.lines.map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="mt-3 text-sm text-faint">{u.source}</p>
+                </>
+              );
+
+              return u.href ? (
+                <a
+                  key={u.eyebrow}
+                  href={u.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cardClass}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <article key={u.eyebrow} className={cardClass}>
+                  {inner}
+                </article>
+              );
+            })}
           </div>
         </section>
 
@@ -117,25 +124,7 @@ export default async function AboutPage() {
           <h2 className="font-display text-cream text-2xl sm:text-3xl">
             Favorite Pics
           </h2>
-          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {FAVORITES.map((photo) => (
-              <div
-                key={photo.src}
-                className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line bg-surface"
-              >
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/10 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="font-display text-cream text-lg">
-                    {photo.alt}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <PhotoGallery photos={FAVORITES} />
         </section>
       </main>
 

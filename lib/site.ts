@@ -40,8 +40,9 @@ export const education = [
   {
     title: "University of Michigan",
     org: "B.S. Honors Mathematics & Computer Science · Ann Arbor, MI",
-    detail: "GPA 3.97",
+    detail: "",
     period: "Graduating May 2028",
+    logo: "/photos/logo-umich.png",
   },
 ] as const;
 
@@ -51,6 +52,7 @@ export const experience = [
     org: "Blitzy · Boston, MA",
     detail: "Benchmarked Blitzy's AI coding agent on SWE-bench Pro and developed internal evaluation frameworks.",
     period: "May 2026 – Aug. 2026",
+    logo: "/photos/logo-blitzy.png",
   },
   {
     title: "Research Assistant",
@@ -58,6 +60,7 @@ export const experience = [
     detail:
       "ADC cancer-therapeutics research with C++ simulations and Python data pipelines.",
     period: "May 2026 – Aug. 2026",
+    logo: "/photos/logo-umich.png",
   },
   {
     title: "Investment Analyst Intern",
@@ -65,29 +68,33 @@ export const experience = [
     detail:
       "Biotech-focused hedge fund research on cystic fibrosis treatments, translating biomedical findings into quantitative models.",
     period: "Jul. 2025 – Aug. 2025",
+    logo: "/photos/logo-silverarc.png",
   },
   {
     title: "Director of Computer Science",
     org: "Greater Boston STEM Program (gbSTEM) · Boston, MA",
     detail: "Led 15 instructors building a project-based CS curriculum.",
     period: "Sep. 2023 – May 2025",
+    logo: "/photos/logo-gbstem.png",
   },
   {
     title: "Machine Learning Intern",
-    org: "Mass General Hospital · Boston, MA",
+    org: "Chu Lab, Mass General Hospital · Boston, MA",
     detail:
       "Built ML models to detect sharp-wave ripples in high-density EEG data for epilepsy research.",
     period: "July 2024 – Sep. 2024",
+    logo: "/photos/logo-mgh.png",
   },
 ] as const;
 
 export const projects = [
   {
-    title: "KTP App Development Lead",
+    title: "KTP Life App",
     org: "Flutter SDK, Dart, Firebase, Figma",
     detail:
-      "Member-tracking app (20+ pages) for 700+ users across iOS, Android, and Web.",
+      "Member-tracking feature (20+ pages) for 700+ users across iOS, Android, and Web.",
     period: "Sep. 2025 – May 2026",
+    href: "https://www.ktpmichigan.com/life",
   },
   {
     title: "Healthcare Analytics Dashboard",
@@ -102,6 +109,7 @@ export const projects = [
     detail:
       "Discrete-event simulator with price-time priority matching over 1M+ events.",
     period: "Jan. 2026 – Feb. 2026",
+    href: "https://github.com/ajayw36/order-book",
   },
 ] as const;
 
@@ -139,7 +147,7 @@ export async function getGitHubUpdate(): Promise<Update> {
       eyebrow: "Building",
       title: repo.name,
       detail: repo.description ?? "No description yet",
-      source: `Updated ${timeAgo(repo.pushed_at)}`,
+      source: `Updated ${timeAgo(repo.pushed_at)} on GitHub`,
       href: repo.html_url,
     };
   }
@@ -201,7 +209,7 @@ export async function getSpotifyUpdate(): Promise<Update> {
       eyebrow: "Listening",
       title: track.name,
       detail: artists,
-      source: `Played ${timeAgo(item.played_at)}`,
+      source: `Played ${timeAgo(item.played_at)} on Spotify`,
       href: track.external_urls?.spotify,
     };
   } catch {
@@ -279,7 +287,7 @@ export async function getHevyUpdate(): Promise<Update> {
     return {
       eyebrow: "Lifting",
       title: workout.title || "Workout",
-      source: `Trained ${timeAgo(workout.start_time)}`,
+      source: `Trained ${timeAgo(workout.start_time)} with Hevy`,
       href: site.socials.hevy,
       lines,
     };
