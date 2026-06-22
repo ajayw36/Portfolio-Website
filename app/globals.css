@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette — dark editorial */
-  --color-ink: #14171c; /* page background */
-  --color-ink-soft: #181c22; /* slightly raised background */
-  --color-surface: #1b2027; /* card background */
-  --color-line: #2a2f38; /* hairline borders */
+  /* Palette — dark editorial, navy-tinted (maize & blue) */
+  --color-ink: #0e1622; /* page background — deep navy */
+  --color-ink-soft: #121c2b; /* slightly raised background */
+  --color-surface: #162235; /* card background */
+  --color-line: #283750; /* hairline borders */
   --color-cream: #f4f2ec; /* headings / strong text */
   --color-muted: #a8aeb8; /* body text */
   --color-faint: #6b7280; /* placeholder labels */
