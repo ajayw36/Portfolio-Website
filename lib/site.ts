@@ -41,7 +41,7 @@ export const education = [
     title: "University of Michigan",
     org: "B.S. Honors Mathematics & Computer Science · Ann Arbor, MI",
     detail: "GPA 3.97",
-    period: "Sep. 2024 – May 2028",
+    period: "Graduating May 2028",
   },
 ] as const;
 
@@ -87,7 +87,7 @@ export const projects = [
     org: "Flutter SDK, Dart, Firebase, Figma",
     detail:
       "Member-tracking app (20+ pages) for 700+ users across iOS, Android, and Web.",
-    period: "Sep. 2025 – Present",
+    period: "Sep. 2025 – May 2026",
   },
   {
     title: "Healthcare Analytics Dashboard",
