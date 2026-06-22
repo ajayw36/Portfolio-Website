@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — dark editorial */
+  --color-ink: #14171c; /* page background */
+  --color-ink-soft: #181c22; /* slightly raised background */
+  --color-surface: #1b2027; /* card background */
+  --color-line: #2a2f38; /* hairline borders */
+  --color-cream: #f4f2ec; /* headings / strong text */
+  --color-muted: #a8aeb8; /* body text */
+  --color-faint: #6b7280; /* placeholder labels */
+  --color-gold: #c9a227; /* accent */
+
+  /* Typefaces (wired up in layout.tsx via next/font) */
+  --font-display: var(--font-crimson), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-garamond), Georgia, "Times New Roman", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Gold uppercase eyebrow label used above section headings */
+.eyebrow {
+  font-family: var(--font-body);
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}

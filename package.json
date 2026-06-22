@@ -1,30 +1,27 @@
 {
-  "name": "ajay-website",
+  "name": "ajay-portfolio-v3",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint"
   },
   "dependencies": {
-    "next": "14.2.29",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "next": "16.2.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "swiper": "^12.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.11.24",
-    "@types/react": "18.2.61",
-    "@types/react-dom": "18.2.19",
-    "autoprefixer": "10.4.18",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.29",
-    "postcss": "8.4.35",
-    "tailwindcss": "3.4.1",
-    "typescript": "5.3.3"
-  },
-  "engines": {
-    "node": ">=18.17.0"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
