@@ -54,7 +54,7 @@ export default async function AboutPage() {
               <p>
                 Hi, I&rsquo;m Ajay! I&rsquo;m a student at University of Michigan
                 studying computer science and math. I enjoy thinking about
-                challenging problems and learning the latest technologies.
+                challenging problems and building with the latest technologies.
                 Lately, I&rsquo;ve been working at Blitzy, where I&rsquo;m
                 helping with benchmarking AI models.
               </p>
