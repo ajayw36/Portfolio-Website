@@ -225,33 +225,12 @@ type HevySet = {
 };
 type HevyExercise = { title: string; sets: HevySet[] };
 
-const KG_TO_LB = 2.20462;
-
-// Format one exercise into a single line, e.g.
-// "Hack Squat (Machine) — 3 × 10 @ 184 lb" (collapsed when sets are identical)
-// or "Bench Press — 135×8, 135×6" when they differ.
+// Format one exercise as "name — N sets", dropping the equipment
+// parenthetical, e.g. "Bench Press (Barbell)" -> "Bench Press — 3 sets".
 function formatExercise(ex: HevyExercise): string {
-  const sets = ex.sets ?? [];
-  if (sets.length === 0) return ex.title;
-
-  const fmtSet = (s: HevySet): string => {
-    const lb = s.weight_kg ? `${Math.round(s.weight_kg * KG_TO_LB)} lb` : null;
-    if (s.reps != null && lb) return `${lb} × ${s.reps}`;
-    if (s.reps != null) return `${s.reps} reps`;
-    if (s.duration_seconds != null) return `${Math.round(s.duration_seconds / 60)} min`;
-    if (s.distance_meters != null) return `${s.distance_meters} m`;
-    return lb ?? "—";
-  };
-
-  const formatted = sets.map(fmtSet);
-  if (formatted.length === 1) {
-    return `${ex.title} — ${formatted[0]}`;
-  }
-  const allSame = formatted.every((f) => f === formatted[0]);
-  if (allSame) {
-    return `${ex.title} — ${sets.length} sets · ${formatted[0]}`;
-  }
-  return `${ex.title} — ${formatted.join(", ")}`;
+  const name = ex.title.replace(/\s*\([^)]*\)\s*$/, "").trim();
+  const count = ex.sets?.length ?? 0;
+  return `${name} — ${count} ${count === 1 ? "set" : "sets"}`;
 }
 
 export async function getHevyUpdate(): Promise<Update> {
@@ -280,14 +259,17 @@ export async function getHevyUpdate(): Promise<Update> {
     if (!workout) return fallback;
 
     const exercises: HevyExercise[] = workout.exercises ?? [];
-    const lines = exercises.slice(0, 3).map(formatExercise);
-    const extra = exercises.length - 3;
+    // Cap at 3 lines: show all when there are ≤3 exercises, otherwise
+    // show 2 exercises plus a "+N more" line.
+    const shown = exercises.length > 3 ? 2 : exercises.length;
+    const lines = exercises.slice(0, shown).map(formatExercise);
+    const extra = exercises.length - shown;
     if (extra > 0) lines.push(`+${extra} more`);
 
     return {
       eyebrow: "Lifting",
       title: workout.title || "Workout",
-      source: `Trained ${timeAgo(workout.start_time)} with Hevy`,
+      source: "Trained with Hevy",
       href: site.socials.hevy,
       lines,
     };

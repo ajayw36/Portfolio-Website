@@ -20,10 +20,10 @@ const PORTRAITS = [
 
 const FAVORITES = [
   { src: "/photos/race.jpg", alt: "Ann Arbor 5k" },
-  { src: "/photos/pc.JPG", alt: "My PC" },
+  { src: "/photos/guys.JPG", alt: "AE Guys" },
   { src: "/photos/kayak.JPG", alt: "Kayaking in Iceland" },
   { src: "/photos/montreal.JPG", alt: "Montreal Trip" },
-  { src: "/photos/guys.JPG", alt: "AE Guys" },
+  { src: "/photos/pc.JPG", alt: "My PC" },
   { src: "/photos/retreat.JPG", alt: "KTP Retreat" },
 ];
 
