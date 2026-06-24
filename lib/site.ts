@@ -271,7 +271,7 @@ export async function getHevyUpdate(): Promise<Update> {
     return {
       eyebrow: "Lifting",
       title: workout.title || "Workout",
-      source: when ? `Trained ${timeAgo(when)} on Hevy` : "Trained with Hevy",
+      source: when ? `Trained ${timeAgo(when)} with Hevy` : "Trained with Hevy",
       href: site.socials.hevy,
       lines,
     };
