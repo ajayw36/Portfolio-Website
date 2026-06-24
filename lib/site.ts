@@ -102,6 +102,7 @@ export const projects = [
     detail:
       "Full-stack dashboard with embedded Tableau views for hospital billing and operations.",
     period: "Sep. 2025 – Dec. 2025",
+    href: "https://github.com/brhys1/integrate-analytics-dashboard",
   },
   {
     title: "Limit Order Book Simulator",
