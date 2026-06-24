@@ -266,10 +266,12 @@ export async function getHevyUpdate(): Promise<Update> {
     const extra = exercises.length - shown;
     if (extra > 0) lines.push(`+${extra} more`);
 
+    const when = workout.end_time ?? workout.start_time;
+
     return {
       eyebrow: "Lifting",
       title: workout.title || "Workout",
-      source: "Trained with Hevy",
+      source: when ? `Trained ${timeAgo(when)} on Hevy` : "Trained with Hevy",
       href: site.socials.hevy,
       lines,
     };
