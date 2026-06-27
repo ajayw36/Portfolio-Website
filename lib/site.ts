@@ -118,7 +118,10 @@ export type Update = {
   eyebrow: string;
   title: string;
   detail?: string;
-  source: string;
+  source: string; // shown before JS / when there's no timestamp
+  at?: string; // ISO timestamp — formatted client-side in the visitor's timezone
+  sourcePrefix?: string; // e.g. "Updated" -> "{prefix} {local date} {suffix}"
+  sourceSuffix?: string; // e.g. "on GitHub"
   href?: string;
   lines?: string[]; // optional multi-line body (e.g. Hevy exercise/set list)
 }
@@ -148,7 +151,10 @@ export async function getGitHubUpdate(): Promise<Update> {
       eyebrow: "Building",
       title: repo.name,
       detail: repo.description ?? "No description yet",
-      source: `Updated ${timeAgo(repo.pushed_at)} on GitHub`,
+      source: "Updated on GitHub",
+      at: repo.pushed_at,
+      sourcePrefix: "Updated",
+      sourceSuffix: "on GitHub",
       href: repo.html_url,
     };
   }
@@ -210,7 +216,10 @@ export async function getSpotifyUpdate(): Promise<Update> {
       eyebrow: "Listening",
       title: track.name,
       detail: artists,
-      source: `Played ${timeAgo(item.played_at)} on Spotify`,
+      source: "Played on Spotify",
+      at: item.played_at,
+      sourcePrefix: "Played",
+      sourceSuffix: "on Spotify",
       href: track.external_urls?.spotify,
     };
   } catch {
@@ -272,21 +281,14 @@ export async function getHevyUpdate(): Promise<Update> {
     return {
       eyebrow: "Lifting",
       title: workout.title || "Workout",
-      source: when ? `Trained ${timeAgo(when)} with Hevy` : "Trained with Hevy",
+      source: "Trained with Hevy",
+      at: when ?? undefined,
+      sourcePrefix: "Trained",
+      sourceSuffix: "with Hevy",
       href: site.socials.hevy,
       lines,
     };
   } catch {
     return fallback;
   }
-}
-
-function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const days = Math.floor(diff / 86_400_000);
-  if (days === 0) return "today";
-  if (days === 1) return "yesterday";
-  if (days < 30) return `${days} days ago`;
-  const months = Math.floor(days / 30);
-  return months === 1 ? "1 month ago" : `${months} months ago`;
 }

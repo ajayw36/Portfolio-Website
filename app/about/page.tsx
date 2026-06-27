@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CardSwiper from "@/components/CardSwiper";
 import PhotoGallery from "@/components/PhotoGallery";
+import UpdateSource from "@/components/UpdateSource";
 import {
   getGitHubUpdate,
   getSpotifyUpdate,
@@ -99,7 +100,12 @@ export default async function AboutPage() {
                       ))}
                     </ul>
                   )}
-                  <p className="mt-3 text-sm text-faint">{u.source}</p>
+                  <UpdateSource
+                    fallback={u.source}
+                    at={u.at}
+                    prefix={u.sourcePrefix}
+                    suffix={u.sourceSuffix}
+                  />
                 </>
               );
 
