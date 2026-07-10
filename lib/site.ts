@@ -112,6 +112,30 @@ export const projects = [
     period: "Jan. 2026 – Feb. 2026",
     href: "https://github.com/ajayw36/order-book",
   },
+  {
+    title: "Poker Bank",
+    org: "React, Vite, TypeScript",
+    detail:
+      "Web app to manage buy-ins, cash-outs, and settle-ups for home poker sessions.",
+    period: "Jul. 2026",
+    href: "https://github.com/ajayw36/poker-bank",
+  },
+  {
+    title: "Fitness Dashboard",
+    org: "Next.js, React, Recharts",
+    detail:
+      "Personal dashboard to track fitness goals and visualize workout progress over time.",
+    period: "Jun. 2026 – Jul. 2026",
+    href: "https://github.com/ajayw36/fitness-dashboard",
+  },
+  {
+    title: "Mini Search Engine",
+    org: "Python, Flask",
+    detail:
+      "From-scratch search engine covering crawling, indexing, and ranking.",
+    period: "Jun. 2026",
+    href: "https://github.com/ajayw36/mini-search-engine",
+  },
 ] as const;
 
 export type Update = {
