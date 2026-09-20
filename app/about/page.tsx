@@ -56,8 +56,8 @@ export default async function AboutPage() {
                 Hi, I&rsquo;m Ajay! I&rsquo;m a student at University of Michigan
                 studying computer science and math. I enjoy thinking about
                 challenging problems and building with the latest technologies.
-                Lately, I&rsquo;ve been working at Blitzy, where I&rsquo;m
-                helping with benchmarking AI models.
+                Recently, I moved to San Francisco to work on Terum, an agent
+                skill management startup.
               </p>
               <p>
                 Outside of academics, I enjoy staying active and spending time

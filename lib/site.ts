@@ -48,6 +48,13 @@ export const education = [
 
 export const experience = [
   {
+    title: "Founding Engineer",
+    org: "Terum · San Francisco, CA",
+    detail: "Building an agent skill management platform.",
+    period: "Sep. 2026 – Present",
+    logo: "/photos/logo-terum.svg",
+  },
+  {
     title: "AI Engineering Intern",
     org: "Blitzy · Boston, MA",
     detail: "Benchmarked Blitzy's AI coding agent on SWE-bench Pro and developed internal evaluation frameworks.",
